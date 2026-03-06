@@ -55,78 +55,134 @@
             box-shadow: 0 8px 24px rgba(0,0,0,0.05);
             background: rgba(255, 255, 255, 0.4);
         }
+
+        /* Password Overlay Styling */
+        #password-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: linear-gradient(135deg, #fff5f5 0%, #fce4ec 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .pass-input {
+            border-bottom: 2px solid #fda4af;
+            background: transparent;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .pass-input:focus {
+            border-bottom-color: #fb7185;
+        }
+
+        .hidden-content {
+            opacity: 0;
+            filter: blur(10px);
+            transform: translateY(20px);
+            transition: all 1s ease-out;
+            pointer-events: none;
+        }
+
+        .revealed-content {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateY(0);
+            pointer-events: auto;
+        }
     </style>
 </head>
 <body>
     <div class="flower-bg flower-1"></div>
     <div class="flower-bg flower-2"></div>
 
-    <div class="glass-card max-w-md w-full rounded-[2.5rem] p-10 md:p-14 text-center transition-all duration-1000 opacity-0 translate-y-6" id="main-card">
-        <header class="mb-10">
-            <div class="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-rose-50 heart-glow">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#fb7185" stroke="#fb7185" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Password Protection Screen -->
+    <div id="password-overlay">
+        <div class="text-center p-8 max-w-xs w-full">
+            <div class="inline-flex items-center justify-center w-12 h-12 mb-6 rounded-full bg-rose-50 heart-glow">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#fb7185" stroke="#fb7185" stroke-width="1.5">
                     <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
                 </svg>
             </div>
-            <h1 class="text-xs font-semibold tracking-[0.2em] text-rose-400 uppercase mb-2">In Loving Memory</h1>
-            <p class="serif text-2xl italic text-rose-900">October 29, 2025</p>
-        </header>
+            <h2 class="serif text-2xl text-rose-900 mb-6 italic">Enter Password</h2>
+            <input type="password" id="pass-field" class="pass-input w-full text-center text-2xl tracking-[0.5em] text-rose-800 py-2" maxlength="4" placeholder="••••" autofocus>
+            <p id="error-msg" class="text-rose-400 text-xs mt-4 opacity-0 transition-opacity">Incorrect password, please try again.</p>
+        </div>
+    </div>
 
-        <div class="space-y-8">
-            <div>
-                <span id="day-count" class="serif text-8xl md:text-9xl font-medium text-rose-950 tabular-nums leading-none">0</span>
-                <p class="text-rose-400/80 mt-4 text-sm font-medium tracking-widest uppercase">Total Days</p>
-            </div>
+    <!-- Main Content (Hidden initially) -->
+    <div id="main-content" class="hidden-content">
+        <div class="glass-card max-w-md w-full rounded-[2.5rem] p-10 md:p-14 text-center" id="main-card">
+            <header class="mb-10">
+                <div class="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-rose-50 heart-glow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#fb7185" stroke="#fb7185" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                    </svg>
+                </div>
+                <h1 class="text-xs font-semibold tracking-[0.2em] text-rose-400 uppercase mb-2">In Loving Memory</h1>
+                <p class="serif text-2xl italic text-rose-900">October 29, 2025</p>
+            </header>
 
-            <div class="grid grid-cols-3 gap-4 py-6 border-y border-rose-100">
-                <div class="space-y-1">
-                    <span id="year-count" class="serif block text-3xl text-rose-900">0</span>
-                    <span class="text-[10px] text-rose-300 uppercase tracking-widest font-bold">Years</span>
+            <div class="space-y-8">
+                <div>
+                    <span id="day-count" class="serif text-8xl md:text-9xl font-medium text-rose-950 tabular-nums leading-none">0</span>
+                    <p class="text-rose-400/80 mt-4 text-sm font-medium tracking-widest uppercase">Total Days</p>
                 </div>
-                <div class="space-y-1 border-x border-rose-100">
-                    <span id="month-count" class="serif block text-3xl text-rose-900">0</span>
-                    <span class="text-[10px] text-rose-300 uppercase tracking-widest font-bold">Months</span>
-                </div>
-                <div class="space-y-1">
-                    <span id="detail-day-count" class="serif block text-3xl text-rose-900">0</span>
-                    <span class="text-[10px] text-rose-300 uppercase tracking-widest font-bold">Days</span>
-                </div>
-            </div>
 
-            <div class="space-y-4 pt-2">
-                <p class="text-[10px] font-bold tracking-[0.2em] text-rose-300 uppercase">Upcoming Remembrance</p>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="p-4 rounded-2xl bg-white/40 border border-white/60">
-                        <span id="oct24-countdown" class="serif block text-2xl text-rose-800">0</span>
-                        <span class="text-[9px] text-rose-400 uppercase tracking-tighter font-semibold">Days to Oct 24</span>
+                <div class="grid grid-cols-3 gap-4 py-6 border-y border-rose-100">
+                    <div class="space-y-1">
+                        <span id="year-count" class="serif block text-3xl text-rose-900">0</span>
+                        <span class="text-[10px] text-rose-300 uppercase tracking-widest font-bold">Years</span>
                     </div>
-                    <div class="p-4 rounded-2xl bg-white/40 border border-white/60">
-                        <span id="oct29-countdown" class="serif block text-2xl text-rose-800">0</span>
-                        <span class="text-[9px] text-rose-400 uppercase tracking-tighter font-semibold">Days to Oct 29</span>
+                    <div class="space-y-1 border-x border-rose-100">
+                        <span id="month-count" class="serif block text-3xl text-rose-900">0</span>
+                        <span class="text-[10px] text-rose-300 uppercase tracking-widest font-bold">Months</span>
+                    </div>
+                    <div class="space-y-1">
+                        <span id="detail-day-count" class="serif block text-3xl text-rose-900">0</span>
+                        <span class="text-[10px] text-rose-300 uppercase tracking-widest font-bold">Days</span>
                     </div>
                 </div>
-            </div>
 
-            <!-- Footer Text Moved Up -->
-            <div class="pt-6">
-                <p class="serif italic text-rose-400 text-lg">Always in my heart</p>
-                <div class="mt-4 flex justify-center space-x-1">
-                    <span class="w-1 h-1 rounded-full bg-rose-200"></span>
-                    <span class="w-1 h-1 rounded-full bg-rose-200"></span>
-                    <span class="w-1 h-1 rounded-full bg-rose-200"></span>
+                <div class="space-y-4 pt-2">
+                    <p class="text-[10px] font-bold tracking-[0.2em] text-rose-300 uppercase">Upcoming Remembrance</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 rounded-2xl bg-white/40 border border-white/60">
+                            <span id="oct24-countdown" class="serif block text-2xl text-rose-800">0</span>
+                            <span class="text-[9px] text-rose-400 uppercase tracking-tighter font-semibold">Days to Oct 24</span>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-white/40 border border-white/60">
+                            <span id="oct29-countdown" class="serif block text-2xl text-rose-800">0</span>
+                            <span class="text-[9px] text-rose-400 uppercase tracking-tighter font-semibold">Days to Oct 29</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Spotify Playlist Integration Moved Down -->
-            <div class="pt-4 spotify-container">
-                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/3iA2gUQ3MWeWB519XPq2V6?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                <div class="pt-6">
+                    <p class="serif italic text-rose-400 text-lg">Always in my heart</p>
+                    <div class="mt-4 flex justify-center space-x-1">
+                        <span class="w-1 h-1 rounded-full bg-rose-200"></span>
+                        <span class="w-1 h-1 rounded-full bg-rose-200"></span>
+                        <span class="w-1 h-1 rounded-full bg-rose-200"></span>
+                    </div>
+                </div>
+
+                <div class="pt-4 spotify-container">
+                    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/3iA2gUQ3MWeWB519XPq2V6?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
         const startDate = new Date('2025-10-29T00:00:00');
-        const card = document.getElementById('main-card');
+        const overlay = document.getElementById('password-overlay');
+        const passField = document.getElementById('pass-field');
+        const mainContent = document.getElementById('main-content');
+        const errorMsg = document.getElementById('error-msg');
         
         const yearEl = document.getElementById('year-count');
         const monthEl = document.getElementById('month-count');
@@ -135,6 +191,31 @@
         
         const oct24El = document.getElementById('oct24-countdown');
         const oct29El = document.getElementById('oct29-countdown');
+
+        // Password logic
+        passField.addEventListener('input', (e) => {
+            if (e.target.value === '1024') {
+                unlock();
+            } else if (e.target.value.length === 4) {
+                errorMsg.style.opacity = '1';
+                setTimeout(() => {
+                    e.target.value = '';
+                    errorMsg.style.opacity = '0';
+                }, 1000);
+            }
+        });
+
+        function unlock() {
+            overlay.style.opacity = '0';
+            overlay.style.pointerEvents = 'none';
+            overlay.style.transform = 'scale(1.1)';
+            
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                mainContent.classList.add('revealed-content');
+                updateCounter();
+            }, 800);
+        }
 
         function getDaysUntil(month, day) {
             const now = new Date();
@@ -178,15 +259,7 @@
             oct29El.innerText = getDaysUntil(10, 29);
         }
 
-        window.onload = () => {
-            setTimeout(() => {
-                card.classList.remove('opacity-0', 'translate-y-6');
-                card.classList.add('opacity-100', 'translate-y-0');
-            }, 100);
-
-            updateCounter();
-            setInterval(updateCounter, 60000); 
-        };
+        setInterval(updateCounter, 60000); 
     </script>
 </body>
 </html>
