@@ -108,7 +108,8 @@
                 </svg>
             </div>
             <h2 class="serif text-2xl text-rose-900 mb-6 italic">Enter Password</h2>
-            <input type="password" id="pass-field" class="pass-input w-full text-center text-2xl tracking-[0.5em] text-rose-800 py-2" maxlength="4" placeholder="••••" autofocus>
+            <!-- Updated input with inputmode="numeric" and pattern to show keypad -->
+            <input type="password" id="pass-field" inputmode="numeric" pattern="[0-9]*" class="pass-input w-full text-center text-2xl tracking-[0.5em] text-rose-800 py-2" maxlength="4" placeholder="••••" autofocus>
             <p id="error-msg" class="text-rose-400 text-xs mt-4 opacity-0 transition-opacity">Incorrect password, please try again.</p>
         </div>
     </div>
